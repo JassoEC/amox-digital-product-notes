@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/amox-digital.png" width="1024" alt="Amox Digital logo" />
+  <img src="images/amox-digital.png" width="1024" height="500" alt="Amox Digital logo" />
 </p>
 
 
