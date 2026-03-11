@@ -163,13 +163,65 @@ por claridad y sostenibilidad a largo plazo.
 
 ---
 
+## En el código
+
+**DTO en Application — representa intención, no estructura de UI:**
+
+```ts
+// application/businessProfile/dtos/input.ts
+export interface BusinessProfileInputDto {
+    businessName?: string
+    contactInfo?: string
+    locationReference?: string
+}
+```
+
+**Caso de uso — carga entidad, aplica DTO, persiste:**
+
+```ts
+// application/businessProfile/usecases/UpdateBusinessProfile.ts
+async execute(params: BusinessProfileInputDto): Promise<BusinessProfileOutputDto> {
+    const existingProfile = await this.businessProfileRepository.get()
+
+    if (params.businessName !== undefined) {
+        existingProfile.changeBusinessName(params.businessName)
+    }
+    // ...
+    await this.businessProfileRepository.save(existingProfile)
+    return toBusinessProfileOutput(existingProfile)
+}
+```
+
+La Presentation nunca construye ni mutua entidades de dominio directamente.
+
+**Hook en Presentation — adaptador hacia React:**
+
+```ts
+// presentation/hooks/application-adapters/useBusinessProfile.ts
+export function useBusinessProfile() {
+    const { profile, hydrate } = useBusinessProfileStore()
+    return {
+        profile,
+        updateBusinessProfile: async (data) => {
+            const updated = await updateBusinessProfile.execute(data)
+            if (updated) hydrate(updated)
+        },
+    }
+}
+```
+
+Los hooks viven en `presentation/hooks/application-adapters/`.
+La capa `application/` no contiene ningún hook.
+
+---
+
 ## Regla derivada
 
-> Entidades con invariantes  
-> no se usan como estado editable de UI.  
->  
-> La UI expresa intención.  
-> Application decide.  
+> Entidades con invariantes
+> no se usan como estado editable de UI.
+>
+> La UI expresa intención.
+> Application decide.
 > Domain valida.
 
 ---

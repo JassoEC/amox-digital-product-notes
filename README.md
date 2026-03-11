@@ -7,8 +7,9 @@
 
 Este repositorio documenta el **diseño, las decisiones y los límites** detrás de **AMOX Digital**, una aplicación móvil orientada a apoyar la comunicación comercial de negocios pequeños que venden por chat.
 
-No contiene el código de la aplicación.  
-Contiene el **razonamiento** que la sostiene.
+No contiene el código de la aplicación.
+Contiene el **razonamiento** que la sostiene —
+incluyendo las decisiones que resultaron incorrectas y cómo se corrigieron.
 
 ---
 
@@ -21,7 +22,7 @@ El producto existe para reducir:
 - desgaste mental
 - errores al copiar y pegar información
 
-AMOX **no envía mensajes**, **no automatiza respuestas** y **no administra conversaciones**.  
+AMOX **no envía mensajes**, **no automatiza respuestas** y **no administra conversaciones**.
 Su rol termina antes del envío.
 
 > *AMOX prepara mensajes. El usuario decide cómo, cuándo y dónde enviarlos.*
@@ -41,7 +42,7 @@ Todos los días se repite la misma información:
 
 Esto genera fricción cognitiva, inconsistencias y pérdida de tiempo, especialmente cuando la energía mental ya es limitada.
 
-El problema no es el canal (WhatsApp).  
+El problema no es el canal (WhatsApp).
 El problema es **reconstruir el mismo mensaje una y otra vez**.
 
 ---
@@ -50,16 +51,27 @@ El problema es **reconstruir el mismo mensaje una y otra vez**.
 
 AMOX fue diseñado con restricciones claras:
 
-- Uso inmediato  
-- Sin cuentas  
-- Sin dependencia de APIs de mensajería  
-- Sin automatización  
-- Sin flujos impuestos  
+- Uso inmediato
+- Sin cuentas
+- Sin dependencia de APIs de mensajería
+- Sin automatización
+- Sin flujos impuestos
 
 El producto prioriza **claridad operativa y reposo mental** sobre features extensos.
 
-No busca escalar conversaciones.  
+No busca escalar conversaciones.
 Busca **sostener al usuario cuando ya está cansado o cuando tiene más tareas en las que enfocarse**.
+
+---
+
+## Criterio técnico de alcance
+
+La complejidad técnica se introduce cuando el problema validado la justifica — no antes.
+
+Esta posición está documentada en los ADRs y en los límites explícitos del producto:
+- → [`06-no-scope.md`](/docs/06-no-scope.md) — funcionalidades fuera de alcance y por qué
+- → [`ADR-PROD-001`](/docs/adr/ADR-PROD-001-amox-no-automatiza.md) — el principio fundacional de no automatizar
+- → [`ADR-001`](/docs/adr/ADR-001-identidad-singleton-logico.md) — simplicidad en el modelo de dominio como decisión consciente
 
 ---
 
@@ -76,7 +88,7 @@ Este repositorio existe para dejar rastro de:
 - decisiones técnicas documentadas como ADRs
 - aprendizajes obtenidos durante validación temprana
 
-Cada documento responde a una pregunta concreta del tipo:
+Cada documento responde a la misma pregunta:
 > *¿Por qué se decidió esto y qué se aceptó a cambio?*
 
 ---
@@ -97,38 +109,38 @@ Es un **registro de criterio de producto e ingeniería**, pensado para ser leíd
 Este repositorio utiliza algunos términos de forma **intencional y consistente**.
 No funcionan como definiciones académicas, sino como **marcos de criterio**.
 
-- **Criterio**  
+- **Criterio**
   Capacidad de tomar decisiones conscientes bajo restricciones reales.
   En AMOX, el criterio importa más que la cantidad de features.
 
-- **Trade-offs**  
+- **Trade-offs**
   Consecuencias aceptadas explícitamente al tomar una decisión.
   Toda decisión documentada en este repositorio implica algo que se gana y algo que se pierde.
 
-- **Reposo mental**  
+- **Reposo mental**
   Alivio cognitivo inmediato al reducir repetición, memoria y reconstrucción innecesaria.
   Es una propuesta de valor central del producto.
 
-- **Control narrativo**  
+- **Control narrativo**
   El usuario mantiene siempre el control sobre qué se dice, cómo se dice y cuándo se envía.
   AMOX no sustituye ni automatiza ese rol.
 
-- **Preparar mensajes**  
+- **Preparar mensajes**
   Construir mensajes claros y reutilizables **antes del envío**.
   El envío ocurre siempre fuera de AMOX, en el canal elegido por el usuario.
 
-- **No automatiza**  
+- **No automatiza**
   Principio fundacional del producto.
   AMOX no responde, no decide y no actúa sin intervención humana.
 
-- **Fuera de alcance**  
+- **Fuera de alcance**
   Funcionalidades deliberadamente excluidas para proteger claridad, foco y bajo costo cognitivo.
   No es falta de capacidad técnica, es decisión de producto.
 
-- **Validación temprana**  
+- **Validación temprana**
   Señales cualitativas obtenidas con usuarios reales para confirmar o descartar hipótesis, no métricas de escala ni crecimiento.
 
-- **Decisiones en el tiempo**  
+- **Decisiones en el tiempo**
   Registro de cómo el criterio del producto madura conforme cambia el contexto,
   sin asumir progreso lineal ni acumulación automática de features.
 
@@ -136,12 +148,10 @@ No funcionan como definiciones académicas, sino como **marcos de criterio**.
 
 ## Estructura
 
-- `/docs`  
-  - `adr/` → decisiones técnicas documentadas  
-  - `validacion/` → aprendizajes con usuarios reales  
+- `/docs`
+  - `adr/` → decisiones técnicas documentadas
+  - `validacion/` → aprendizajes con usuarios reales
   - visión, problema, principios, alcance, UX y dominio del producto
-
-La estructura está pensada para leerse de forma secuencial, no como referencia aislada.
 
 ---
 
@@ -170,35 +180,20 @@ El contenido de este repositorio se actualiza conforme:
 
 ---
 
-## Intención del repositorio
-
-Este repositorio forma parte de un portafolio profesional.
-
-Su objetivo no es demostrar cantidad de código, sino **capacidad para diseñar, acotar y sostener un producto real**, tomando decisiones conscientes frente a trade-offs técnicos y de negocio.
-
----
-
 ## Lectura recomendada
 
-Si quieres entender AMOX desde el criterio (no desde features):
+**Desde el producto** — qué es, qué problema resuelve y por qué tiene los límites que tiene
 
-1. Visión del producto  
-   → [`00-vision.md`](/docs/00-vision.md)
+→ [`00-vision.md`](/docs/00-vision.md)
+→ [`01-problem-insights.md`](/docs/01-problem-insights.md)
+→ [`02-principios-de-producto.md`](/docs/02-principios-de-producto.md)
+→ [`06-no-scope.md`](/docs/06-no-scope.md)
 
-2. Problema observado e insights reales  
-   → [`01-problem-insights.md`](/docs/01-problem-insights.md)
+**Desde la ingeniería** — cómo se modeló, qué se decidió y qué se encontró en el camino
 
-3. Principios no negociables  
-   → [`02-principios-de-producto.md`](/docs/02-principios-de-producto.md)
-
-4. Qué entra y qué queda fuera del MVP  
-   → [`05-mvp-scope.md`](/docs/05-mvp-scope.md)  
-   → [`06-no-scope.md`](/docs/06-no-scope.md)
-
-5. Decisiones técnicas clave (ADRs)  
-   → [`ADR-PROD-001`](/docs/adr/ADR-PROD-001-amox-no-automatiza.md)  
-   → [`ADR-001`](/docs/adr/ADR-001-identidad-singleton-logico.md)  
-   → [`ADR-002`](/docs/adr/ADR-002-separacion-application-presentation.md)
+→ [`ADR-001`](/docs/adr/ADR-001-identidad-singleton-logico.md)
+→ [`ADR-002`](/docs/adr/ADR-002-separacion-application-presentation.md)
+→ [`ADR-003`](/docs/adr/ADR-003-precio-cero-elemento-contextual.md)
 
 ---
 

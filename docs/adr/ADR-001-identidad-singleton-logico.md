@@ -139,10 +139,33 @@ ya que no aportan valor al problema validado.
 
 ---
 
+## En el código
+
+El contrato del repositorio de identidad es minimal por diseño:
+
+```ts
+// domain/repositories/BusinessProfileRepository.ts
+export interface BusinessProfileRepository {
+    get(): Promise<BusinessProfile>
+    save(profile: BusinessProfile): Promise<void>
+    getOptional(): Promise<BusinessProfile | null>
+}
+```
+
+No existe `list()`, `findById()` ni ninguna operación de colección.
+El contrato refleja exactamente la semántica del singleton lógico:
+**se carga, se modifica, se persiste.**
+
+Las entidades de identidad (`BusinessProfile`, `BusinessPreferences`, `MessageFooter`)
+son clases con campos privados y métodos de cambio explícitos —
+no objetos planos ni estructuras intercambiables.
+
+---
+
 ## Regla derivada
 
-> Si una entidad define identidad y cambia raramente,  
-> debe modelarse como *singleton lógico*,  
+> Si una entidad define identidad y cambia raramente,
+> debe modelarse como *singleton lógico*,
 > no como colección editable.
 
 ---
