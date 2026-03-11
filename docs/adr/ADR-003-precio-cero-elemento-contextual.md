@@ -2,7 +2,7 @@
 
 ## Estado
 
-Aceptada — decisión de renderizado
+Aceptada — decisión de renderizado, validada con observación de usuarios reales
 
 ---
 
@@ -140,6 +140,56 @@ El trade-off se considera aceptable frente a la simplicidad obtenida.
 - Coherente con:
   - ADR-001 (modelo simple, sin estados adicionales)
   - ADR-PROD-001 (AMOX no introduce complejidad que no aporta valor)
+
+---
+
+## En el código
+
+La regla de renderizado vive en `presentation/hooks/message/narrative/buildProductBlock.ts`:
+
+```ts
+if (options.showPrices && product.price > 0) {
+    const priceFormatted = product.price.toLocaleString('es-MX', {
+        style: 'currency',
+        currency: currencyCode || 'MXN',
+    })
+    lines.push(priceFormatted)
+}
+```
+
+El dominio (`Product.ts`) almacena `price: number` sin restricción sobre cero.
+La omisión del precio ocurre únicamente en la capa de presentación, sin afectar el modelo.
+
+---
+
+## Consecuencia observada en dominio
+
+Durante el desarrollo existió una inconsistencia detectada a partir de observación real de usuarios:
+
+`Product.isReadyToShow()` incluía la condición `price > 0`:
+
+```ts
+isReadyToShow(): boolean {
+    return this.price > 0 && this.description != undefined && this.shortDescription != undefined
+}
+```
+
+Esto mezclaba dos razones de cambio en un mismo método:
+
+1. **Completitud del producto para catálogo** — tiene nombre, descripción, descripción corta.
+2. **Precio definido** — condición que ADR-003 establece como independiente del renderizado.
+
+Un producto contextual (precio = 0) era incorrectamente marcado como "no listo para mostrarse",
+contradiciendo la decisión documentada aquí.
+
+La corrección separó ambas responsabilidades:
+- `isReadyToShow()` evalúa completitud de información, sin considerar el precio.
+- La omisión del precio en el mensaje sigue siendo exclusivamente una regla de renderizado.
+
+> Esta inconsistencia fue detectada por observación directa de uso real,
+> no por revisión de código.
+> Confirma que la decisión documentada en este ADR tenía implicaciones de dominio
+> que no habían sido completamente resueltas en la implementación inicial.
 
 ---
 
