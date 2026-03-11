@@ -155,7 +155,7 @@ conforme aparecieron validaciones reales, límites técnicos y claridad de rol d
 Este registro no enumera features,
 documenta **criterio aplicado bajo contexto real**.
 
-→ [`09-linea-de-tiempo-y-maduracion.md`](/docs/09-linea-de-tiempo-y-maduracion.md)
+→ [`08-linea-de-tiempo-y-maduracion.md`](/docs/08-linea-de-tiempo-y-maduracion.md)
 
 ---
 
